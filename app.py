@@ -1,18 +1,27 @@
+# --- IMPORT PACKAGES ---
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
 
 
+# --- LOAD IN DATA ---
 locations = pd.read_csv("locations.csv")
 data = pd.read_csv("data_v1.csv")
 
 
+# --- CONSTANTS ---
+mcdonalds_color = "#FF2D08"
+subway_color = "#009743"
+
+
+# --- DATA WRANGLING CACHE ---
 @st.cache
 def income_data_wrangle():
     df = data.copy()
 
     income_columns = [s for s in data.columns if "annual_income_" in s]
+
     low_income = [
         "annual_income_less_than_$10_000",
         "annual_income_$10_000_to_$14_999",
@@ -75,12 +84,17 @@ def income_data_wrangle():
         ignore_index=False,
     )
 
+    income_df = income_df[income_df["restaurant_count"] > 0]
+
     return income_df
 
 
+# --- DEFINING CONTAINERS ---
 top = st.container()
 income = st.container()
 
+
+# --- ACTUAL STUFF ON PAGE ---
 with top:
     st.title("Subway & McDonalds Analysis")
 
@@ -94,6 +108,7 @@ with top:
 
 
 with income:
+    st.header("INCOME")
     income_df = income_data_wrangle()
 
     fig = px.histogram(
@@ -104,7 +119,7 @@ with income:
         # colors=colors,
         marginal="violin",  # or rug, box
         hover_data=income_df.columns,
-        color_discrete_map={"mcdonalds": "#FF2D08", "subway": "#009743"},
+        color_discrete_map={"mcdonalds": mcdonalds_color, "subway": subway_color},
         labels=dict(
             weighted_average="Average Income per Tract",
             restaurant_count="Restraunt Count",
