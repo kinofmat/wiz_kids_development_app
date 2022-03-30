@@ -1385,6 +1385,95 @@
       </table>
       <simple-id uuid='{8D5F26BF-98CF-48B7-B206-481B75E7971C}' />
     </worksheet>
+    <worksheet name='Sheet 10'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontname='Tableau Semibold'>Income Groups Increases Number of McDonalds/Subways</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='data_v1' name='federated.1uuyq6p0abnsm91gei70o0y8g7ks' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1uuyq6p0abnsm91gei70o0y8g7ks'>
+            <column caption='Annual Income $100 000 To $124 999' datatype='integer' name='[annual_income_$100_000_to_$124_999]' role='measure' type='quantitative' />
+            <column caption='Annual Income $10 000 To $14 999' datatype='integer' name='[annual_income_$10_000_to_$14_999]' role='measure' type='quantitative' />
+            <column caption='Annual Income $125 000 To $149 999' datatype='integer' name='[annual_income_$125_000_to_$149_999]' role='measure' type='quantitative' />
+            <column caption='Annual Income $15 000 To $19 999' datatype='integer' name='[annual_income_$15_000_to_$19_999]' role='measure' type='quantitative' />
+            <column-instance column='[annual_income_$100_000_to_$124_999]' derivation='Median' name='[med:annual_income_$100_000_to_$124_999:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[annual_income_$10_000_to_$14_999]' derivation='Median' name='[med:annual_income_$10_000_to_$14_999:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[annual_income_$125_000_to_$149_999]' derivation='Median' name='[med:annual_income_$125_000_to_$149_999:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[annual_income_$15_000_to_$19_999]' derivation='Median' name='[med:annual_income_$15_000_to_$19_999:qk]' pivot='key' type='quantitative' />
+            <column caption='N Mcdonalds' datatype='integer' name='[n_mcdonalds]' role='measure' type='quantitative' />
+            <column caption='N Subway' datatype='integer' name='[n_subway]' role='measure' type='quantitative' />
+            <column-instance column='[n_mcdonalds]' derivation='None' name='[none:n_mcdonalds:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[n_subway]' derivation='None' name='[none:n_subway:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' field='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:n_mcdonalds:qk]' field-type='quantitative' max='3' min='-1' range-type='fixed' scope='cols' type='space' />
+            <format attr='title' class='0' field='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:n_mcdonalds:qk]' scope='cols' value='Number of  Mcdonalds' />
+            <format attr='title' class='0' field='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:n_subway:qk]' scope='cols' value='Number of Subways' />
+            <format attr='title' class='0' field='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$15_000_to_$19_999:qk]' scope='rows' value='Median $15K - $20K' />
+            <format attr='title' class='0' field='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$10_000_to_$14_999:qk]' scope='rows' value='Median $10K - $15' />
+            <format attr='title' class='0' field='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$125_000_to_$149_999:qk]' scope='rows' value='Median $125K - $150K' />
+            <format attr='title' class='0' field='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$100_000_to_$124_999:qk]' scope='rows' value='Median $100K - $125K' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <trendline enable-confidence-bands='false' enable-instant-analytics='true' enabled='true' exclude-color='false' exclude-intercept='false' fit='linear' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-mode' value='all' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='3' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:n_mcdonalds:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <trendline enable-confidence-bands='false' enable-instant-analytics='true' enabled='true' exclude-color='false' exclude-intercept='false' fit='linear' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-mode' value='all' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='4' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:n_subway:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <trendline enable-confidence-bands='false' enable-instant-analytics='true' enabled='true' exclude-color='false' exclude-intercept='false' fit='linear' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-mode' value='all' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>([federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$100_000_to_$124_999:qk] + ([federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$125_000_to_$149_999:qk] + ([federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$10_000_to_$14_999:qk] + [federated.1uuyq6p0abnsm91gei70o0y8g7ks].[med:annual_income_$15_000_to_$19_999:qk])))</rows>
+        <cols>([federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:n_mcdonalds:qk] + [federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:n_subway:qk])</cols>
+      </table>
+      <simple-id uuid='{B52A995E-4677-4536-B1BC-F6E5BD716BDF}' />
+    </worksheet>
     <worksheet name='Sheet 2'>
       <table>
         <view>
@@ -1648,7 +1737,6 @@
             <column-instance column='[n_lsRestaurants]' derivation='None' name='[none:n_lsRestaurants:qk]' pivot='key' type='quantitative' />
             <column-instance column='[native_hawaiian_and_other_pacific_islander_alone]' derivation='None' name='[none:native_hawaiian_and_other_pacific_islander_alone:qk]' pivot='key' type='quantitative' />
             <column-instance column='[two_or_more_races]' derivation='None' name='[none:two_or_more_races:qk]' pivot='key' type='quantitative' />
-            <column-instance column='[n_lsRestaurants]' derivation='Sum' name='[sum:n_lsRestaurants:qk]' pivot='key' type='quantitative' />
             <column caption='Two Or More Races' datatype='integer' name='[two_or_more_races]' role='measure' type='quantitative' />
           </datasource-dependencies>
           <aggregation value='true' />
@@ -1664,45 +1752,30 @@
               <breakdown value='auto' />
             </view>
             <mark class='Bar' />
-            <encodings>
-              <color column='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[sum:n_lsRestaurants:qk]' />
-            </encodings>
           </pane>
           <pane id='1' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:asian_alone:qk]'>
             <view>
               <breakdown value='auto' />
             </view>
             <mark class='Bar' />
-            <encodings>
-              <color column='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[sum:n_lsRestaurants:qk]' />
-            </encodings>
           </pane>
           <pane id='2' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:black_or_african_american_alone:qk]'>
             <view>
               <breakdown value='auto' />
             </view>
             <mark class='Bar' />
-            <encodings>
-              <color column='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[sum:n_lsRestaurants:qk]' />
-            </encodings>
           </pane>
           <pane id='3' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:native_hawaiian_and_other_pacific_islander_alone:qk]'>
             <view>
               <breakdown value='auto' />
             </view>
             <mark class='Bar' />
-            <encodings>
-              <color column='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[sum:n_lsRestaurants:qk]' />
-            </encodings>
           </pane>
           <pane id='6' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:two_or_more_races:qk]'>
             <view>
               <breakdown value='auto' />
             </view>
             <mark class='Bar' />
-            <encodings>
-              <color column='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[sum:n_lsRestaurants:qk]' />
-            </encodings>
           </pane>
         </panes>
         <rows>([federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:asian_alone:qk] + ([federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:two_or_more_races:qk] + ([federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:black_or_african_american_alone:qk] + [federated.1uuyq6p0abnsm91gei70o0y8g7ks].[none:native_hawaiian_and_other_pacific_islander_alone:qk])))</rows>
@@ -2000,7 +2073,7 @@
       </cards>
       <simple-id uuid='{F8EE1388-DFB5-448E-9903-B6FE676B86C3}' />
     </window>
-    <window class='worksheet' maximized='true' name='Sheet 6'>
+    <window class='worksheet' name='Sheet 6'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -2020,13 +2093,31 @@
             <card type='title' />
           </strip>
         </edge>
-        <edge name='right'>
+      </cards>
+      <simple-id uuid='{1BBF7FF1-DC30-4620-AFB4-49DE18801BB2}' />
+    </window>
+    <window class='worksheet' maximized='true' name='Sheet 10'>
+      <cards>
+        <edge name='left'>
           <strip size='160'>
-            <card pane-specification-id='1' param='[federated.1uuyq6p0abnsm91gei70o0y8g7ks].[sum:n_lsRestaurants:qk]' type='color' />
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='title' />
           </strip>
         </edge>
       </cards>
-      <simple-id uuid='{1BBF7FF1-DC30-4620-AFB4-49DE18801BB2}' />
+      <simple-id uuid='{83376E9A-8377-49B4-A3D8-CF5FD4ACE39F}' />
     </window>
     <window class='worksheet' name='Sheet 7'>
       <cards>

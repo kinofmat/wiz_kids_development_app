@@ -182,6 +182,7 @@ with top:
 
     st.image('Race Threshold.png', caption=None, channels="RGB", output_format="auto")
 
+    st.image('Income Groups.png', caption=None, channels="RGB", output_format="auto")
 
 
 with income:
