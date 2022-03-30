@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import altair as alt
+import statsmodels
 
 
 # --- LOAD IN DATA ---
@@ -131,6 +132,7 @@ new_loc = new_loc_wrangle()
 
 # --- DEFINING CONTAINERS ---
 top = st.container()
+demos = st.container()
 income = st.container()
 visitors = st.container()
 analysis = st.container()
