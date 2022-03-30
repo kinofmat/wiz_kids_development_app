@@ -136,6 +136,7 @@ demos = st.container()
 income = st.container()
 visitors = st.container()
 analysis = st.container()
+recs = st.container()
 
 
 # --- ACTUAL STUFF ON PAGE ---
@@ -180,13 +181,15 @@ with top:
     fig.update_layout(title_text="Density Map")
     st.plotly_chart(fig, use_container_width=True)
 
-    st.image('Race Threshold.png', caption=None, channels="RGB", output_format="auto")
+with demos:
+    st.header("Demographics")
+    st.image("Race Threshold.png", caption=None, channels="RGB", output_format="auto")
 
-    st.image('Income Groups.png', caption=None, channels="RGB", output_format="auto")
+    st.image("Income Groups.png", caption=None, channels="RGB", output_format="auto")
 
 
 with income:
-    st.header("INCOME")
+    st.header("Income")
     no0_df = income_df[income_df["restaurant_count"] > 0]
     # RESTRAUNT HISTOGRAM
     fig = px.histogram(
@@ -268,7 +271,7 @@ with income:
     st.plotly_chart(fig, use_container_width=True)
 
 with visitors:
-    st.header("How about Average Visitors?")
+    st.header("Average Visitors")
     # AVERAGE VISITORS
     fig = px.scatter(
         income_df,
@@ -399,7 +402,7 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    
+
     chart = (
         alt.Chart(data)
         .encode(
@@ -414,7 +417,6 @@ with analysis:
     )
     st.altair_chart(chart)
 
-    
     chart = (
         alt.Chart(data)
         .encode(
@@ -443,33 +445,58 @@ with analysis:
     )
     st.altair_chart(chart)
 
-    df = pd.read_csv('data_v1.csv')
-    selection = df.loc[:,['region', 'tract','new_business_proportion', 'n_lsRestaurants', 'n_subway', 'n_mcdonalds']]
+    df = pd.read_csv("data_v1.csv")
+    selection = df.loc[
+        :,
+        [
+            "region",
+            "tract",
+            "new_business_proportion",
+            "n_lsRestaurants",
+            "n_subway",
+            "n_mcdonalds",
+        ],
+    ]
 
+    selection["business_growth"] = pd.qcut(
+        selection.new_business_proportion,
+        q=[0, 0.25, 0.50, 0.75, 1],
+        labels=["low growth", "med-low growth", "med-high growth", "high growth"],
+    )
 
-    selection['business_growth'] = pd.qcut(selection.new_business_proportion, q=[0,0.25,0.50,
-                    0.75,1], labels=['low growth', 'med-low growth','med-high growth' ,'high growth'])
+    # we specifically want locations without a subway or mcdonalds
+    selection1 = selection[(selection["n_subway"]) == 0]
+    selection1 = selection1[(selection1["n_mcdonalds"]) == 0]
 
+    # we only want areas with high growth since thats where alot of mcdonalds and subways tend to be
+    growth_graph = selection1[(selection1["business_growth"] == "high growth")]
+    # only get top 3 for each region and group by business proportions
+    growth_graph = (
+        growth_graph.sort_values(by=["n_lsRestaurants"], ascending=False)
+        .groupby("region")
+        .head(3)
+    )
+    growth_graph = (
+        growth_graph.sort_values(
+            by=["region", "new_business_proportion"], ascending=False
+        )
+        .groupby("region")
+        .head(3)
+    )
+    growth_chart = growth_graph.loc[
+        :,
+        [
+            "region",
+            "tract",
+            "n_lsRestaurants",
+            "new_business_proportion",
+            "business_growth",
+        ],
+    ]
 
+with recs:
+    st.header("New Location Recommendation")
 
-
-
-#we specifically want locations without a subway or mcdonalds
-    selection1 = selection[(selection['n_subway']) ==0 ]
-    selection1 = selection1[(selection1['n_mcdonalds']) ==0 ]
-
-
-
-#we only want areas with high growth since thats where alot of mcdonalds and subways tend to be
-    growth_graph = selection1[(selection1['business_growth'] =='high growth') ]
-#only get top 3 for each region and group by business proportions
-    growth_graph = growth_graph.sort_values(by=['n_lsRestaurants'], ascending=False).groupby('region').head(3)
-    growth_graph = growth_graph.sort_values(by=['region','new_business_proportion' ], ascending=False).groupby('region').head(3)
-    growth_chart = growth_graph.loc[:,['region', 'tract','n_lsRestaurants','new_business_proportion', 'business_growth']]
-
-
-    st.subheader('New Location Recommendation')
-    
     st.write(growth_chart)
 
 
