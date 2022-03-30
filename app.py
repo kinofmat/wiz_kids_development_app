@@ -78,21 +78,61 @@ def income_data_wrangle():
 
     income_df = pd.melt(
         df,
-        id_vars=["tract", "region", "income", "weighted_average"],
+        id_vars=[
+            "tract",
+            "region",
+            "income",
+            "weighted_average",
+            "total_businesses",
+            "average_visitors",
+            "new_business_proportion",
+        ],
         value_vars=["subway", "mcdonalds"],
         var_name="restaurant",
         value_name="restaurant_count",
         ignore_index=False,
     )
 
-    income_df = income_df[income_df["restaurant_count"] > 0]
+    # income_df = income_df[income_df["restaurant_count"] > 0]
+    income_df["ks"] = income_df["weighted_average"].round(decimals=-4)
+    income_df["has_restaurant"] = income_df["restaurant_count"].apply(
+        lambda x: 1 if x > 0 else 0
+    )
 
     return income_df
+
+
+income_df = income_data_wrangle()
+
+
+@st.cache
+def new_loc_wrangle():
+    new_loc = locations.rename(columns={"location_name": "restaurant"})
+    new_loc["restaurant"] = new_loc["restaurant"].apply(
+        lambda x: "mcdonalds" if x == "McDonald's" else "subway"
+    )  # .reset_index()
+    new_loc = new_loc.merge(income_df, on=["tract", "restaurant"]).dropna()
+    most_visits = (
+        new_loc.sort_values("average_visitors", ascending=False)
+        .head(10)["tract"]
+        .unique()
+        .tolist()
+    )
+
+    new_loc["most_visits"] = new_loc["tract"].apply(
+        lambda x: 1 if x in most_visits else 0
+    )
+
+    return new_loc
+
+
+new_loc = new_loc_wrangle()
 
 
 # --- DEFINING CONTAINERS ---
 top = st.container()
 income = st.container()
+visitors = st.container()
 analysis = st.container()
 
 
@@ -106,13 +146,43 @@ with top:
     st.write(
         "Here are all of the Subway and McDonalds locations 4 states: Utah, Colorado, Idaho, and Wyoming"
     )
-    st.map(data=locations, zoom=None, use_container_width=True)
+    # st.map(data=locations, zoom=None, use_container_width=True)
+
+    fig = px.scatter_mapbox(
+        new_loc,
+        lat="latitude",
+        lon="longitude",
+        # radius=10,
+        center=dict(lat=43.2218, lon=-111.3939),
+        zoom=3.70,
+        mapbox_style="carto-positron",
+        hover_name="restaurant",
+        hover_data=["city"],
+        color="restaurant",
+        color_discrete_map={"mcdonalds": mcdonalds_color, "subway": subway_color},
+    )
+    fig.update_layout(title_text="Location Map")
+    st.plotly_chart(fig, use_container_width=True)
+
+    fig = px.density_mapbox(
+        new_loc,
+        lat="latitude",
+        lon="longitude",
+        radius=10,
+        center=dict(lat=43.2218, lon=-111.3939),
+        zoom=3.70,
+        mapbox_style="carto-positron",
+        hover_name="restaurant",
+        hover_data=["city"],
+    )
+    fig.update_layout(title_text="Density Map")
+    st.plotly_chart(fig, use_container_width=True)
 
 
 with income:
     st.header("INCOME")
-    income_df = income_data_wrangle()
 
+    # RESTRAUNT HISTOGRAM
     fig = px.histogram(
         income_df,
         x="weighted_average",
@@ -131,6 +201,109 @@ with income:
 
     fig.update_layout(title_text="Income vs. Store Count")
     fig.update_traces(opacity=0.75)
+    st.plotly_chart(fig, use_container_width=True)
+
+    # INCOME  REGRESSION
+    new = (
+        income_df.groupby(["region", "ks", "restaurant"])["restaurant_count"]
+        .mean()
+        .reset_index()
+    )
+    fig = px.scatter(
+        new,
+        x="ks",
+        y="restaurant_count",
+        facet_col="restaurant",
+        color="restaurant",
+        opacity=0.65,
+        trendline="ols",
+        trendline_color_override="darkblue",
+        color_discrete_map={"mcdonalds": mcdonalds_color, "subway": subway_color},
+        labels=dict(
+            ks="Median Income\n(rounded to the nearest 10k)",
+            restaurant_count="% that have a Restraunt",
+            restaurant="Restraunt",
+        ),
+    )
+    fig.update_layout(title_text="As Income goes up, the odds it has a subway go up")
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Total Businesses Regression
+    fig = px.scatter(
+        income_df,
+        x="total_businesses",
+        y="has_restaurant",
+        facet_col="restaurant",
+        color="restaurant",
+        opacity=0.65,
+        trendline="ols",
+        trendline_color_override="darkblue",
+        color_discrete_map={"mcdonalds": mcdonalds_color, "subway": subway_color},
+        labels=dict(
+            total_businesses="Num Business per Tract",
+            has_restaurant="Tract Has Restaurant",
+            restaurant="Restraunt",
+        ),
+    )
+    fig.update_layout(
+        title_text="As Number of Business Go Up, so do Restaurants",
+        annotations=[
+            dict(
+                xref="paper",
+                yref="paper",
+                x=0.5,
+                y=-0.25,
+                showarrow=False,
+                text="(0=No, 1=Yes)",
+            )
+        ],
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+with visitors:
+    st.header("How about Average Visitors?")
+    # AVERAGE VISITORS
+    fig = px.scatter(
+        income_df,
+        x="average_visitors",
+        y="has_restaurant",
+        facet_col="restaurant",
+        color="restaurant",
+        opacity=0.65,
+        trendline="ols",
+        trendline_color_override="darkblue",
+        color_discrete_map={"mcdonalds": mcdonalds_color, "subway": subway_color},
+        hover_name="restaurant",
+        hover_data=["region", "tract", "average_visitors", "has_restaurant"],
+        labels=dict(
+            average_visitors="Avg Visitors per Tract",
+            has_restaurant="Tract Has Restaurant",
+            restaurant="Restraunt",
+        ),
+    )
+    fig.update_layout(
+        title_text="Does Average Visitor Count affect Restraunt Placement?",
+        # hoverlabel=dict(bgcolor="white"),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    # average visits map
+    fig = px.scatter_mapbox(
+        new_loc,
+        lat="latitude",
+        lon="longitude",
+        # radius=10,
+        center=dict(lat=43.2218, lon=-111.3939),
+        zoom=3.70,
+        mapbox_style="carto-positron",
+        hover_name="restaurant",
+        hover_data=["city"],
+        color="average_visitors",
+        size="average_visitors",
+    )
+
+    fig.update_layout(title_text="Average Visitors Map")
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -153,16 +326,16 @@ with analysis:
     st.write("Chart Explanation")
 
     chart = (
-    alt.Chart(data)
-    .encode(
-        alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
-        alt.Y("median_age_total", axis=alt.Axis(title="Age")),
-        color=alt.Color("region", title="State"),
-    )
-    .mark_circle()
-    .configure_axis(labelFontSize=18, titleFontSize=18)
-    .configure_title(fontSize=20)
-    .configure_legend(titleFontSize=18, labelFontSize=18)
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("median_age_total", axis=alt.Axis(title="Age")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
     st.write("Chart Explanation")
@@ -182,7 +355,6 @@ with analysis:
     st.altair_chart(chart)
     st.write("Chart Explanation")
 
-    
     chart = (
         alt.Chart(data)
         .encode(
@@ -197,7 +369,7 @@ with analysis:
     )
     st.altair_chart(chart)
     st.write("Chart Explanation")
-    
+
     chart = (
         alt.Chart(data)
         .encode(
@@ -213,6 +385,7 @@ with analysis:
     st.altair_chart(chart)
     st.write("Chart Explanation")
 
+<<<<<<< HEAD
     chart = (
         alt.Chart(data)
         .encode(
@@ -228,6 +401,8 @@ with analysis:
     st.altair_chart(chart)
     st.write("Chart Explanation")
     
+=======
+>>>>>>> 51e4e0189bc7b4b7c0e0ef7592dad47a60e4c5d3
     chart = (
         alt.Chart(data)
         .encode(
@@ -274,3 +449,4 @@ with analysis:
     st.altair_chart(chart)
     st.write("Chart Explanation")
 
+# %%
