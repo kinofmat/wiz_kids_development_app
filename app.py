@@ -187,10 +187,10 @@ with top:
 
 with income:
     st.header("INCOME")
-
+    no0_df = income_df[income_df["restaurant_count"] > 0]
     # RESTRAUNT HISTOGRAM
     fig = px.histogram(
-        income_df,
+        no0_df,
         x="weighted_average",
         y="restaurant_count",
         color="restaurant",
