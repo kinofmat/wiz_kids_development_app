@@ -368,7 +368,7 @@ chart = (
         alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
         color=alt.Color("region", title="State"),
     )
-    .mark_circle()
+    .mark_boxplot(extent='min-max')
     .configure_axis(labelFontSize=18, titleFontSize=18)
     .configure_title(fontSize=20)
     .configure_legend(titleFontSize=18, labelFontSize=18)
@@ -383,7 +383,7 @@ chart = (
         alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
         color=alt.Color("region", title="State"),
     )
-    .mark_circle()
+    .mark_boxplot(extent='min-max')
     .configure_axis(labelFontSize=18, titleFontSize=18)
     .configure_title(fontSize=20)
     .configure_legend(titleFontSize=18, labelFontSize=18)
