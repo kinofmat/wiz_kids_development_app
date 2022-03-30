@@ -416,4 +416,34 @@ with analysis:
     st.write("Chart Explanation")
 
 
+    df = pd.read_csv('data_v1.csv')
+    selection = df.loc[:,['region', 'tract','new_business_proportion', 'n_lsRestaurants', 'n_subway', 'n_mcdonalds']]
+
+
+    selection['business_growth'] = pd.qcut(selection.new_business_proportion, q=[0,0.25,0.50,
+                    0.75,1], labels=['low growth', 'med-low growth','med-high growth' ,'high growth'])
+
+
+
+
+
+#we specifically want locations without a subway or mcdonalds
+    selection1 = selection[(selection['n_subway']) ==0 ]
+    selection1 = selection1[(selection1['n_mcdonalds']) ==0 ]
+
+
+
+#we only want areas with high growth since thats where alot of mcdonalds and subways tend to be
+    growth_graph = selection1[(selection1['business_growth'] =='high growth') ]
+#only get top 3 for each region and group by business proportions
+    growth_graph = growth_graph.sort_values(by=['n_lsRestaurants'], ascending=False).groupby('region').head(3)
+    growth_graph = growth_graph.sort_values(by=['region','new_business_proportion' ], ascending=False).groupby('region').head(3)
+    growth_chart = growth_graph.loc[:,['region', 'tract','n_lsRestaurants','new_business_proportion', 'business_growth']]
+
+
+    st.subheader('New Location Recommendation')
+    
+    st.write(growth_chart)
+
+
 # %%
