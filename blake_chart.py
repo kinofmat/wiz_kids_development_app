@@ -52,7 +52,7 @@ growth_graph = selection1[(selection1['business_growth'] =='high growth') ]
 #only get top 3 for each region and group by business proportions
 growth_graph = growth_graph.sort_values(by=['n_lsRestaurants'], ascending=False).groupby('region').head(3)
 growth_graph = growth_graph.sort_values(by=['region','new_business_proportion' ], ascending=False).groupby('region').head(3)
-growth_graph.loc[:,['region', 'tract', 'n_lsRestaurants', 'business_growth']]
+growth_graph.loc[:,['region', 'tract', 'new_business_proportion','n_lsRestaurants', 'business_growth']]
 # %%
 import seaborn as sns
 sns.set_theme(style="whitegrid")
