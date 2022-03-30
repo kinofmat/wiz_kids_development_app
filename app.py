@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import altair as alt
 
 
 # --- LOAD IN DATA ---
@@ -132,6 +133,7 @@ new_loc = new_loc_wrangle()
 top = st.container()
 income = st.container()
 visitors = st.container()
+analysis = st.container()
 
 
 # --- ACTUAL STUFF ON PAGE ---
@@ -304,4 +306,114 @@ with visitors:
     fig.update_layout(title_text="Average Visitors Map")
     st.plotly_chart(fig, use_container_width=True)
 
-#%%
+
+with analysis:
+    st.header("Something for Interesting graphs")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("total_population_estimate", axis=alt.Axis(title="Pop")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("median_age_total", axis=alt.Axis(title="Age")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("count_bigger_places_by_tract", axis=alt.Axis(title="Big Places")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("commute_less_than_5_minutes", axis=alt.Axis(title="5 min Commute")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("commute_10_to_14_minutes", axis=alt.Axis(title="10-14 min Commute")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("commute_30_to_34_minutes", axis=alt.Axis(title="30-34 min Commute")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+
+# %%

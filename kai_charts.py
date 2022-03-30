@@ -350,7 +350,7 @@ chart = (
     alt.Chart(df)
     .encode(
         alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
-        alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bus")),
+        alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
         color=alt.Color("region", title="State"),
     )
     .mark_circle()
@@ -365,7 +365,7 @@ chart = (
     alt.Chart(df)
     .encode(
         alt.X("n_subway", axis=alt.Axis(title="Subway Count")),
-        alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bus")),
+        alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
         color=alt.Color("region", title="State"),
     )
     .mark_circle()
@@ -380,7 +380,7 @@ chart = (
     alt.Chart(df)
     .encode(
         alt.X("n_mcdonalds", axis=alt.Axis(title="McDonald Count")),
-        alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bus")),
+        alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
         color=alt.Color("region", title="State"),
     )
     .mark_circle()
