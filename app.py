@@ -178,6 +178,9 @@ with top:
     fig.update_layout(title_text="Density Map")
     st.plotly_chart(fig, use_container_width=True)
 
+    st.image('Race Threshold.png', caption=None, channels="RGB", output_format="auto")
+
+
 
 with income:
     st.header("INCOME")
