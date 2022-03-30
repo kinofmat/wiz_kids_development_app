@@ -310,7 +310,7 @@ with visitors:
 
 
 with analysis:
-    st.header("Something for Interesting graphs")
+    st.header("Business Analysis")
 
     chart = (
         alt.Chart(data)
@@ -325,7 +325,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -340,7 +339,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -355,7 +353,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -370,7 +367,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -385,7 +381,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -400,13 +395,12 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
     
     chart = (
         alt.Chart(data)
         .encode(
             alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
-            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
             color=alt.Color("region", title="State"),
         )
         .mark_circle()
@@ -415,14 +409,13 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     
     chart = (
         alt.Chart(data)
         .encode(
             alt.X("n_subway", axis=alt.Axis(title="Subway Count")),
-            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
             color=alt.Color("region", title="State"),
         )
         .mark_circle()
@@ -431,13 +424,12 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
         .encode(
             alt.X("n_mcdonalds", axis=alt.Axis(title="McDonald Count")),
-            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
             color=alt.Color("region", title="State"),
         )
         .mark_circle()
@@ -446,6 +438,5 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
 # %%
