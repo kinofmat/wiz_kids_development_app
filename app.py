@@ -171,21 +171,6 @@ with analysis:
         alt.Chart(data)
         .encode(
             alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
-            alt.Y("count_bigger_places_by_tract", axis=alt.Axis(title="Big Places")),
-            color=alt.Color("region", title="State"),
-        )
-        .mark_circle()
-        .configure_axis(labelFontSize=18, titleFontSize=18)
-        .configure_title(fontSize=20)
-        .configure_legend(titleFontSize=18, labelFontSize=18)
-    )
-    st.altair_chart(chart)
-    st.write("Chart Explanation")
-
-    chart = (
-        alt.Chart(data)
-        .encode(
-            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
             alt.Y("commute_less_than_5_minutes", axis=alt.Axis(title="5 min Commute")),
             color=alt.Color("region", title="State"),
         )
@@ -227,6 +212,21 @@ with analysis:
     )
     st.altair_chart(chart)
     st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("count_bigger_places_by_tract", axis=alt.Axis(title="Big Places")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
     
     chart = (
         alt.Chart(data)
@@ -243,4 +243,34 @@ with analysis:
     st.altair_chart(chart)
     st.write("Chart Explanation")
 
+    
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_subway", axis=alt.Axis(title="Subway Count")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_mcdonalds", axis=alt.Axis(title="McDonald Count")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+    st.write("Chart Explanation")
 
