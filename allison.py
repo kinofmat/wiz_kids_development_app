@@ -1,6 +1,6 @@
 #%%
 # import sys
-# !{sys.executable} -m pip install plotly-geo
+# !{sys.executable} -m pip install plotly
 
 #%%
 from matplotlib.pyplot import xlabel, ylabel
@@ -10,19 +10,12 @@ import numpy as np
 import plotly.express as px
 import statsmodels
 
-import plotly.figure_factory as ff
-
 
 # %%
 data = pd.read_csv("data_v1.csv")
 data
-
 locations = pd.read_csv("locations.csv")
 locations
-
-
-#%%
-
 #%%
 
 
@@ -85,15 +78,7 @@ def income_data_wrangle():
 
     income_df = pd.melt(
         df,
-        id_vars=[
-            "tract",
-            "region",
-            "income",
-            "weighted_average",
-            "total_businesses",
-            "average_visitors",
-            "new_business_proportion",
-        ],
+        id_vars=["tract", "region", "income", "weighted_average"],
         value_vars=["subway", "mcdonalds"],
         var_name="restaurant",
         value_name="restaurant_count",
@@ -109,13 +94,6 @@ income_df = income_data_wrangle()
 income_df
 
 #%%
-new_loc = locations.rename(columns={"location_name": "restaurant"})
-new_loc["restaurant"] = new_loc["restaurant"].apply(
-    lambda x: "mcdonalds" if x == "McDonald's" else "subway"
-)  # .reset_index()
-new_loc = new_loc.merge(income_df, on=["tract", "restaurant"])
-new_loc
-#%%
 
 fig = px.scatter(
     income_df,
@@ -130,7 +108,6 @@ fig.show()
 
 data.columns
 
-#%%
 gender_columns = ["median_age_total", "median_age_male", "median_age_female"]
 
 race_columns = [
@@ -231,38 +208,18 @@ fig.show()
 # %%
 income_df
 # %%
-locations
+locations["longitude"].mean()
 #%%
-#%%
-fig1 = px.density_mapbox(
+fig = px.density_mapbox(
     locations,
     lat="latitude",
     lon="longitude",
     radius=10,
     center=dict(lat=40.6592988, lon=-108.63106623175966),
     zoom=4,
-    mapbox_style="carto-positron",
-    hover_name="location_name",
-    hover_data=["city"],
+    mapbox_style="stamen-terrain",
 )
-fig1.show()
-
-#%%
-fig2 = px.scatter_mapbox(
-    locations,
-    lat="latitude",
-    lon="longitude",
-    # radius=10,
-    center=dict(lat=40.6592988, lon=-108.63106623175966),
-    zoom=4,
-    mapbox_style="open-street-map",
-    hover_name="location_name",
-    hover_data=["city"],
-    color="location_name",
-)
-fig2.show()
-#%%
-
+fig.show()
 # %%
 new = (
     income_df.groupby(["region", "income", "restaurant"])["restaurant_count"]
@@ -283,17 +240,13 @@ fig = px.scatter(
 fig.show()
 
 #%%
-income_df = income_data_wrangle()
-
-income_df
-#%%
 def custom_round(x, base=5):
     return int(base * round(float(x) / base))
 
 
 income_df["ks"] = income_df["weighted_average"].round(decimals=-4)
-income_df["has_restaurant"] = income_df["restaurant_count"].apply(
-    lambda x: 1 if x > 0 else 0
+income_df["has_restaurant"] = income_df.apply(
+    lambda x: 1 if x.restaurant_count > 0 else 0
 )
 income_df
 
@@ -303,7 +256,6 @@ new = (
     .reset_index()
 )
 
-#%%
 fig = px.scatter(
     new,
     x="ks",
@@ -313,107 +265,5 @@ fig = px.scatter(
     opacity=0.65,
     trendline="ols",
     trendline_color_override="darkblue",
-    labels=dict(
-        ks="Median Income\n(rounded to the nearest 10k)",
-        restaurant_count="% that have a Restraunt",
-        restaurant="Restraunt",
-    ),
 )
 fig.show()
-
-#%%
-income_df_business = income_df  # [income_df["restaurant_count"] > 0].reset_index()
-income_df_business
-
-fig = px.scatter(
-    income_df_business,
-    x="total_businesses",
-    y="has_restaurant",
-    facet_col="restaurant",
-    color="restaurant",
-    opacity=0.65,
-    trendline="ols",
-    trendline_color_override="darkblue",
-)
-fig.show()
-
-# %%
-
-
-fig = px.scatter(
-    income_df,
-    x="average_visitors",
-    y="has_restaurant",
-    facet_col="restaurant",
-    color="restaurant",
-    opacity=0.65,
-    trendline="ols",
-    hover_name="restaurant",
-    hover_data=["region", "tract", "average_visitors", "has_restaurant"],
-    trendline_color_override="darkblue",
-)
-fig.update_layout(
-    hoverlabel=dict(bgcolor="white", font_size=16, font_family="Rockwell")
-)
-fig.show()
-
-# %%
-new_loc = locations.rename(columns={"location_name": "restaurant"})
-new_loc["restaurant"] = new_loc["restaurant"].apply(
-    lambda x: "mcdonalds" if x == "McDonald's" else "subway"
-)  # .reset_index()
-new_loc
-
-#%%
-new_loc.columns
-
-#%%
-new_loc = new_loc.dropna()
-
-fig1 = px.scatter_mapbox(
-    new_loc,
-    lat="latitude",
-    lon="longitude",
-    # radius=10,
-    center=dict(lat=40.6592988, lon=-108.63106623175966),
-    zoom=4,
-    mapbox_style="carto-positron",
-    hover_name="restaurant",
-    hover_data=["city"],
-    size="weighted_average",
-    color="restaurant",
-)
-fig1.show()
-
-#%%
-most_visits = (
-    new_loc.sort_values("average_visitors", ascending=False)
-    .head(10)["tract"]
-    .unique()
-    .tolist()
-)
-most_visits
-
-new_loc["most_visits"] = new_loc["tract"].apply(lambda x: 1 if x in most_visits else 0)
-new_loc
-
-#%%
-fig = px.scatter_mapbox(
-    new_loc,
-    lat="latitude",
-    lon="longitude",
-    # radius=10,
-    center=dict(lat=43.2218, lon=-111.3939),
-    zoom=3.70,
-    mapbox_style="carto-positron",
-    hover_name="restaurant",
-    hover_data=["city"],
-    color="average_visitors",
-    size="average_visitors"
-    # color_discrete_map={"McDonald's": mcdonalds_color, "Subway": subway_color},
-)
-fig.update_layout(title_text="Location Map")
-fig.show()
-
-#%%
-i

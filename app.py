@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import altair as alt
+import statsmodels
 
 
 # --- LOAD IN DATA ---
@@ -131,6 +132,7 @@ new_loc = new_loc_wrangle()
 
 # --- DEFINING CONTAINERS ---
 top = st.container()
+demos = st.container()
 income = st.container()
 visitors = st.container()
 analysis = st.container()
@@ -311,7 +313,7 @@ with visitors:
 
 
 with analysis:
-    st.header("Something for Interesting graphs")
+    st.header("Business Analysis")
 
     chart = (
         alt.Chart(data)
@@ -326,7 +328,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -341,22 +342,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
-
-    chart = (
-        alt.Chart(data)
-        .encode(
-            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
-            alt.Y("count_bigger_places_by_tract", axis=alt.Axis(title="Big Places")),
-            color=alt.Color("region", title="State"),
-        )
-        .mark_circle()
-        .configure_axis(labelFontSize=18, titleFontSize=18)
-        .configure_title(fontSize=20)
-        .configure_legend(titleFontSize=18, labelFontSize=18)
-    )
-    st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -371,7 +356,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -386,7 +370,6 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
@@ -401,13 +384,12 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
 
     chart = (
         alt.Chart(data)
         .encode(
             alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
-            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Bussinesses")),
+            alt.Y("count_bigger_places_by_tract", axis=alt.Axis(title="Big Places")),
             color=alt.Color("region", title="State"),
         )
         .mark_circle()
@@ -416,7 +398,48 @@ with analysis:
         .configure_legend(titleFontSize=18, labelFontSize=18)
     )
     st.altair_chart(chart)
-    st.write("Chart Explanation")
+    
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_lsRestaurants", axis=alt.Axis(title="Restaurant Count")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
 
+    
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_subway", axis=alt.Axis(title="Subway Count")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
+
+    chart = (
+        alt.Chart(data)
+        .encode(
+            alt.X("n_mcdonalds", axis=alt.Axis(title="McDonald Count")),
+            alt.Y("count_new_bus_past_year", axis=alt.Axis(title="New Businesses")),
+            color=alt.Color("region", title="State"),
+        )
+        .mark_circle()
+        .configure_axis(labelFontSize=18, titleFontSize=18)
+        .configure_title(fontSize=20)
+        .configure_legend(titleFontSize=18, labelFontSize=18)
+    )
+    st.altair_chart(chart)
 
 # %%
