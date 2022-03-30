@@ -385,7 +385,6 @@ with analysis:
     st.altair_chart(chart)
     st.write("Chart Explanation")
 
-<<<<<<< HEAD
     chart = (
         alt.Chart(data)
         .encode(
@@ -401,8 +400,6 @@ with analysis:
     st.altair_chart(chart)
     st.write("Chart Explanation")
     
-=======
->>>>>>> 51e4e0189bc7b4b7c0e0ef7592dad47a60e4c5d3
     chart = (
         alt.Chart(data)
         .encode(
